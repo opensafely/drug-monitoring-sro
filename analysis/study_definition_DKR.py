@@ -124,28 +124,28 @@ study = StudyDefinition(
                                                               find_last_match_in_period = False, 
                                                               return_expectations = {"float": {"distribution": "normal", "mean": 100, "stddev": 20}}),
                                                                                         
-    # Cockroft-Gault Creatinine Clearance 
-    baseline_crcl_cockroft_gault = patients.cockroft_gault_crcl(between = ["index - 3 months", "rivaroxaban_initiation_date - 1 day"],
+    # cockcroft-Gault Creatinine Clearance 
+    baseline_crcl_cockcroft_gault = patients.cockcroft_gault_crcl(between = ["index - 3 months", "rivaroxaban_initiation_date - 1 day"],
                                                                return_expectations = "float": {"distribution": "normal", "mean": 100, "stddev": 20}),                                                                                
                                                                                      
                             
     # CrCl Categorisation (<15, 15-30, 30-60, >60)
     crcl_categories = patients.categorised_as(
-        {"<15": """baseline_crcl_cockroft_gault < 15""", 
-         "15-30": """baseline_crcl_cockroft_gault >= 15 AND baseline_crcl_cockroft_gault < 30"""
-         "30-60": """baseline_crcl_cockroft_gault >= 30 AND baseline_crcl_cockroft_gault < 60"""
-         ">60": """baseline_crcl_cockroft_gault >=60"""},
+        {"<15": """baseline_crcl_cockcroft_gault < 15""", 
+         "15-30": """baseline_crcl_cockcroft_gault >= 15 AND baseline_crcl_cockcroft_gault < 30"""
+         "30-60": """baseline_crcl_cockcroft_gault >= 30 AND baseline_crcl_cockcroft_gault < 60"""
+         ">60": """baseline_crcl_cockcroft_gault >=60"""},
         return_expectations={
             "rate":"universal",
             "category": {"ratios": {"<15": 0.1, "15-30": 0.2, "30-60": 0.2, ">60":0.5}}}),                                                                                    
                                                                                         
     # Patients who died during follow-up - these are excluded from the analysis as it would be unreasonable to include people who died during their expected follow-up period to have missed their renal function monitoring! 
     died_during_follow_up_3m = patients.satisfying(
-        """baseline_crcl_cockroft_gault < 30 AND died_after_3_months_rivaroxaban""", 
+        """baseline_crcl_cockcroft_gault < 30 AND died_after_3_months_rivaroxaban""", 
         return_expectations={"incidence": 0.01}),
         
     died_during_follow_up_6m = patients.satisfying(
-        """baseline_crcl_cockroft_gault < 60 AND baseline_crcl_cockroft_gault >= 30 AND died_after_6_months_rivaroxaban""", 
+        """baseline_crcl_cockcroft_gault < 60 AND baseline_crcl_cockcroft_gault >= 30 AND died_after_6_months_rivaroxaban""", 
         return_expectations={"incidence": 0.01}),
      
     
@@ -157,17 +157,17 @@ study = StudyDefinition(
     # Required monitoring - this is the denominator for measures
     # This tests if there has been over three months elapsed since starting rivaroxaban - if this is the case, a test should have been carried out 
     group_1_required_monitoring = patients.satisfying(
-        """baseline_crcl_cockroft_gault < 30 AND rivaroxaban_initiation_date <= DATEADD(m, -3, GETDATE())""",
+        """baseline_crcl_cockcroft_gault < 30 AND rivaroxaban_initiation_date <= DATEADD(m, -3, GETDATE())""",
         return_expectations={"incidence": 0.80}),
                                                             
     # This tests if there has been over six months elapsed since starting rivaroxaban - if this is the case, a test should have been carried out 
     group_2_required_monitoring = patients.satisfying(
-        """baseline_crcl_cockroft_gault >= 30 AND baseline_crcl_cockroft_gault < 60 AND rivaroxaban_initiation_date <= DATEADD(m, -6, GETDATE())""",
+        """baseline_crcl_cockcroft_gault >= 30 AND baseline_crcl_cockcroft_gault < 60 AND rivaroxaban_initiation_date <= DATEADD(m, -6, GETDATE())""",
         return_expectations={"incidence": 0.80}),
     
     # This tests if there has been over 12 months elapsed since starting rivaroxaban - if this is the case, a test should have been carried out 
     group_3_required_monitoring = patients.satisfying(
-        """baseline_crcl_cockroft_gault >= 60 AND rivaroxaban_initiation_date <= DATEADD(m, -12, GETDATE())""",
+        """baseline_crcl_cockcroft_gault >= 60 AND rivaroxaban_initiation_date <= DATEADD(m, -12, GETDATE())""",
         return_expectations={"incidence": 0.80}),
     
     # Pool together all the patients who required monitoring 
@@ -184,7 +184,7 @@ study = StudyDefinition(
     
     # This tests if a renal function test was done within 2 and 4 months for patients with CrCl < 30 
     group_1_appropriate_monitoring = patients.satisfying(
-    """renal_function_test_3months AND baseline_crcl_cockroft_gault < 30""", 
+    """renal_function_test_3months AND baseline_crcl_cockcroft_gault < 30""", 
     renal_function_test_3months = patients.with_these_clinical_events(
                 creatinine_codes,
                 between = ['rivaroxaban_initiation_date + 2 months', 'rivaroxaban_initiation_date + 4 months'],
@@ -193,7 +193,7 @@ study = StudyDefinition(
                                                                                         
     # This tests if a renal function test was done within 5 and 7 months for patients with CrCl between 30 - 60 
     group_2_appropriate_monitoring = patients.satisfying(
-    """renal_function_test_6months AND baseline_crcl_cockroft_gault >=30 AND baseline_crcl_cockroft_gault < 60""", 
+    """renal_function_test_6months AND baseline_crcl_cockcroft_gault >=30 AND baseline_crcl_cockcroft_gault < 60""", 
     renal_function_test_6months = patients.with_these_clinical_events(
                 creatinine_codes,
                 between = ['rivaroxaban_initiation_date + 5 months', 'rivaroxaban_initiation_date + 7 months'],
@@ -202,7 +202,7 @@ study = StudyDefinition(
                                                                                         
     # This tests if a renal function test was done within 11 and 13 months for patients with CrCl > 60  
     group_3_appropriate_monitoring = patients.satisfying(
-    """renal_function_test_12months AND  baseline_crcl_cockroft_gault >= 60""", 
+    """renal_function_test_12months AND  baseline_crcl_cockcroft_gault >= 60""", 
     renal_function_test_12months = patients.with_these_clinical_events(
                 creatinine_codes,
                 between = ['rivaroxaban_initiation_date + 11 months', 'rivaroxaban_initiation_date + 13 months'],

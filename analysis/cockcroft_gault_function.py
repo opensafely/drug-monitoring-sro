@@ -1,9 +1,9 @@
-#Cockroft-Gault Function 
+#cockcroft-Gault Function 
 
-def cockroft_gault_crcl(self, between = None): 
+def cockcroft_gault_crcl(self, between = None): 
     
     """Calculates creatinine clearance using the most recent serum creatinine and weight. 
-    If either is missing - returns an empty value. Can limit how contemporary the values used by changing the between date."""
+    If either is missing - returns an empty value. Can limit how contemporary the values used by changing the between datecockcroft."""
     
     date_condition = make_date_filter("ConsultationDate", between)
     
