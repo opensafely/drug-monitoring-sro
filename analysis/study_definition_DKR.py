@@ -26,7 +26,11 @@ study = StudyDefinition(
             
     index_date = index_date,
     
-    # This line defines the study population - patients with newly prescribed rivaroxaban 
+    # This line defines the study population - patients registered with a GP practice with newly prescribed rivaroxaban (i.e never prescribed in the preceding 12 months) 
+    # This excludes patients who have already died 
+    # This excludes patients who died during their expected follow-up (e.g. people with CrCl < 30 who died within 3 months and people with CrCl 30 - 60 who died within 6 months)
+    # This is done as it would be unreasonable to consider people who died as having missed follow-up renal function monitoring 
+ 
     population=patients.satisfying(
         """(rivaroxaban_prescribed) AND
         (NOT rivaroxaban_prescribed_previously) AND 
@@ -135,7 +139,7 @@ study = StudyDefinition(
             "rate":"universal",
             "category": {"ratios": {"<15": 0.1, "15-30": 0.2, "30-60": 0.2, ">60":0.5}}}),                                                                                    
                                                                                         
-    # Patients who died during follow-up
+    # Patients who died during follow-up - these are excluded from the analysis as it would be unreasonable to include people who died during their expected follow-up period to have missed their renal function monitoring! 
     died_during_follow_up_3m = patients.satisfying(
         """baseline_crcl_cockroft_gault < 30 AND died_after_3_months_rivaroxaban""", 
         return_expectations={"incidence": 0.01}),
