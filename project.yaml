@@ -9,7 +9,7 @@ actions:
     run: cohortextractor:latest generate_cohort --study-definition study_definition_crcl
     outputs:
       highly_sensitive:
-        cohort: output/input_2.csv
+        cohort: output/input_crcl.csv
 
 
   crcl_calculator: 

@@ -9,7 +9,7 @@ library('here')
 library('ggplot2')
 
 ## import data
-df_input <- read_csv(here::here("output", "input_2.csv"))
+df_input <- read_csv(here::here("output", "input_crcl.csv"))
 
 #mean arterial pressure 
 #df_input <- mutate(df_input, map = bp_dys + 0.33*(bp_sys-bp_dys))
