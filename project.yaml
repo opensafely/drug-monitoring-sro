@@ -10,20 +10,45 @@ actions:
 #  cohortextractor generate_measures --output-dir output/measures/tpp --study-definition study_definition_tpp
 
 
+actions:
+
   generate_study_population:
+    run: cohortextractor:latest generate_cohort --study-definition study_definition_crcl
+    outputs:
+      highly_sensitive:
+        cohort: output/input_2.csv
+
+
+  crcl_calculator: 
+    run: r:latest analysis/crcl_cockgroft_gault.R
+    needs: [generate_study_population]
+    outputs:  
+      moderately_sensitive: 
+        output: output/output.csv
+
+
+  crcl_hist: 
+    run: r:latest analysis/crcl_histogram.R
+    needs: [crcl_calculator]
+    outputs: 
+      moderately_sensitive:
+        image: output/crcl_hist.png
+
+
+  #generate_study_population:
     run: cohortextractor:latest generate_cohort --study-definition study_definition_tpp --index-date-range "2020-01-01 to 2020-11-01 by month" --output-dir=output/measures/tpp
     outputs:
       highly_sensitive:
         cohort: output/measures/tpp/input_*.csv
 
-  generate_measures:
+  #generate_measures:
     run: cohortextractor:latest generate_measures --study-definition study_definition_tpp --skip-existing --output-dir=output/measures/tpp
     needs: [generate_study_population]
     outputs:
       moderately_sensitive:
         measure_csv: output/measures/tpp/measure_*.csv
         
-  generate_notebook:
+  #generate_notebook:
     run: jupyter:latest jupyter nbconvert /workspace/notebooks/event_incidence.ipynb --execute --to html --output-dir=/workspace/output --ExecutePreprocessor.timeout=86400
     needs: [generate_measures]
     outputs:
