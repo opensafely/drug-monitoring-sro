@@ -18,7 +18,7 @@ crcl <- select(df_input, crcl)
 ## plot histogram 
 
 crcl_hist <- ggplot(crcl, aes(x=crcl)) + geom_density() 
-ggsave(crcl_hist, file = 'crcl_hist.png', path=here::here("output"))
+ggsave(crcl_hist, file = 'crcl_distribution_plot.png', path=here::here("output"))
 
 
 
