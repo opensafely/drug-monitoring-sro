@@ -25,7 +25,7 @@ actions:
     needs: [crcl_calculator]
     outputs: 
       moderately_sensitive:
-        image: output/crcl_hist.png
+        image: output/crcl_distribution_plot.png
 
 
   generate_study_population_2:
