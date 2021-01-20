@@ -15,7 +15,7 @@ df_input <- read_csv(here::here("output", "input_crcl.csv"))
 #df_input <- mutate(df_input, map = bp_dys + 0.33*(bp_sys-bp_dys))
 
 #cockgroft-gault equation 
-df_input <- mutate(df_input, crcl = ifelse(sex=="M",((140 - age)*weight)/(0.814*baseline_creatinine), ((0.85*(140 - age)*weight)/(0.814*baseline_creatinine))))
+df_input <- mutate(df_input, baseline_crcl = ifelse(sex=="M",((140 - age)*weight)/(0.814*baseline_creatinine), ((0.85*(140 - age)*weight)/(0.814*baseline_creatinine))))
 
 
 write.csv(df_input, 'output/output.csv')
