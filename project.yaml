@@ -20,8 +20,8 @@ actions:
         output: output/output.csv
 
 
-  crcl_hist: 
-    run: r:latest analysis/crcl_histogram.R
+  crcl_graph: 
+    run: r:latest analysis/crcl_graph.R
     needs: [crcl_calculator]
     outputs: 
       moderately_sensitive:
