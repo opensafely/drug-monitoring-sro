@@ -16,7 +16,7 @@ from codelists_snomed import *
 
 index_date="2020-01-01"
 
-# Specifiy study defeinition
+# Specifiy study definition
 
 study = StudyDefinition(
     # Configure the expectations framework
